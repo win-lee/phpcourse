@@ -210,7 +210,7 @@
     <h1>Hallo <span>PHP-Entwickler:in</span>! 👋</h1>
     <p>Hier lernst du Schritt für Schritt, wie du mit PHP dynamische Webseiten erstellst –
        von der ersten Ausgabe bis zur eigenen Schleife im HTML. Klicke auf ein Thema, um loszulegen!</p>
-    <span class="badge">💻 Die Nummern entsprechen unseren Unterrichtsdateien (01–09)</span>
+    <span class="badge">💻 Die Nummern entsprechen unseren Unterrichtsdateien (01–11)</span>
   </div>
 </header>
 
@@ -220,7 +220,7 @@
     PHP läuft auf dem <strong>Server</strong> und erzeugt HTML, das im Browser ankommt.
     Während HTML nur <strong>statisch</strong> ist (jeder sieht dasselbe), kann PHP Inhalte
     <strong>dynamisch</strong> berechnen. Die Themen hier folgen genau unseren Dateien
-    <code>01_first.php</code> bis <code>09_formular-html.php</code> – schau sie dir parallel an!
+    <code>01_first.php</code> bis <code>11_zufallszahlen.php</code> – schau sie dir parallel an!
   </p>
 
   <!-- ============ THEMA 1: 01_first.php ============ -->
@@ -658,9 +658,120 @@ auch mehrzeilig sein
     </div>
   </section>
 
+  <!-- ============ THEMA 10: 10_formular-prefill.php ============ -->
+  <section class="topic" id="thema10">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">10</span>
+      Formular vorausfüllen: Radio, Select &amp; Prefill
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p>Ein echtes Formular hat mehr als ein Textfeld: <strong>Radio-Buttons</strong> für Auswahlmöglichkeiten,
+         ein <strong>Dropdown</strong> (<code>&lt;select&gt;</code>) – und nach dem Abschicken bleiben die
+         Eingaben dank <strong>PHP-Prefill</strong> erhalten.</p>
+
+      <div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> 10_formular-prefill.php</div>
+<pre><span class="kw">&lt;?php</span>
+<span class="cmt">// 10_formular-prefill.php</span>
+
+<span class="kw">if</span> (<span class="var">$_POST</span>) {
+    <span class="var">$eingabename</span> = <span class="var">$_POST</span>[<span class="str">"eingabename"</span>];
+    <span class="fn">echo</span> <span class="str">"Dein Name: $eingabename&lt;br&gt;"</span>;
+
+    <span class="var">$hobby</span> = <span class="var">$_POST</span>[<span class="str">"hobby"</span>];
+    <span class="fn">echo</span> <span class="str">"Dein Hobby: $hobby"</span>;
+
+    <span class="var">$essen</span> = <span class="var">$_POST</span>[<span class="str">"essen"</span>];
+    <span class="fn">echo</span> <span class="str">"&lt;br&gt;Du isst: $essen"</span>;
+}
+
+<span class="kw">?&gt;</span>
+
+<span class="html-tag">&lt;form</span> method=<span class="str">"post"</span><span class="html-tag">&gt;</span>
+<span class="html-tag">&lt;input</span> name=<span class="str">"eingabename"</span> value=<span class="str">"&lt;?php echo $eingabename;?&gt;"</span> placeholder=<span class="str">"Gib deinen Namen ein"</span><span class="html-tag">&gt;</span>
+<span class="html-tag">&lt;br&gt;</span>
+
+<span class="html-tag">&lt;input</span> type=<span class="str">"radio"</span> name=<span class="str">"hobby"</span> value=<span class="str">"Langlaufen"</span><span class="html-tag">&gt;</span>Langlaufen
+<span class="html-tag">&lt;input</span> type=<span class="str">"radio"</span> name=<span class="str">"hobby"</span> value=<span class="str">"Padel"</span><span class="html-tag">&gt;</span>Padel
+
+<span class="html-tag">&lt;br&gt;</span>
+Essen:
+<span class="html-tag">&lt;select</span> name=<span class="str">"essen"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;option</span> value=<span class="str">"Pizza"</span><span class="html-tag">&gt;</span>Pizza<span class="html-tag">&lt;/option&gt;</span>
+    <span class="html-tag">&lt;option</span> value=<span class="str">"Nudelsalat"</span><span class="html-tag">&gt;</span>Nudelsalat<span class="html-tag">&lt;/option&gt;</span>
+    <span class="html-tag">&lt;option</span> value=<span class="str">"Sushi"</span><span class="html-tag">&gt;</span>Sushi<span class="html-tag">&lt;/option&gt;</span>
+<span class="html-tag">&lt;/select&gt;</span>
+
+<span class="html-tag">&lt;br&gt;&lt;br&gt;</span>
+<span class="html-tag">&lt;button&gt;</span>Abschicken<span class="html-tag">&lt;/button&gt;</span>
+<span class="html-tag">&lt;/form&gt;</span></pre>
+      </div>
+
+      <h3>🔍 Was du hier lernst</h3>
+      <ul>
+        <li><code>if ($_POST)</code> ist die Kurzform von „wurde irgendwas per POST geschickt?“ – wie <code>isset()</code> in Lektion 09</li>
+        <li><strong>Prefill:</strong> <code>value="&lt;?php echo $eingabename;?&gt;"</code> schreibt die alte Eingabe zurück ins Feld – der Name bleibt nach dem Abschicken stehen</li>
+        <li><strong>Radio-Buttons mit gleichem name</strong> bilden eine Gruppe – nur eine Option wählbar</li>
+        <li><strong>Dropdown:</strong> <code>&lt;select&gt;</code> mit <code>&lt;option value="..."&gt;</code> – in PHP landet der <code>value</code> in <code>$_POST</code></li>
+      </ul>
+
+      <div class="merke"><b>Merke dir:</b> Das <b>name-Attribut</b> entscheidet alles: gleiches name =
+        gleiche Gruppe (Radio), und unter genau diesem name findest du den Wert in <code>$_POST</code>.</div>
+
+      <div class="aufgabe"><b>✏️ Deine Aufgabe:</b> Ergänze eine eigene Radio-Gruppe
+        (z. B. Lieblingsfach) und ein zweites Dropdown – und fülle beide nach dem Abschicken wieder vor.</div>
+    </div>
+  </section>
+
+  <!-- ============ THEMA 11: 11_zufallszahlen.php ============ -->
+  <section class="topic" id="thema11">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">11</span>
+      Zufallszahlen mit rand()
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p>Mit <code>rand()</code> erzeugt PHP Zufallszahlen – die Basis für Spiele, Zufallsbilder
+         und Überraschungen auf der Webseite.</p>
+
+      <div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> 11_zufallszahlen.php</div>
+<pre><span class="kw">&lt;?php</span>
+<span class="cmt">// 11_zufallszahlen.php</span>
+
+<span class="cmt">// Zufallszahlen in PHP mit rand(MIN, MAX)</span>
+
+<span class="var">$zuza1</span> = <span class="fn">rand</span>();
+<span class="fn">echo</span> <span class="str">"Zufallszahl1: $zuza1&lt;br&gt;"</span>;
+
+<span class="var">$zuza2</span> = <span class="fn">rand</span>(<span class="num">1</span>, <span class="num">100</span>);
+<span class="fn">echo</span> <span class="str">"Zufallszahl2: $zuza2&lt;br&gt;"</span>;
+
+<span class="var">$zuza3</span> = <span class="fn">rand</span>(<span class="num">500</span>, <span class="num">800</span>);
+<span class="fn">echo</span> <span class="str">"Zufallszahl3: $zuza3&lt;br&gt;"</span>;
+
+<span class="kw">?&gt;</span></pre>
+      </div>
+
+      <h3>🔍 Was du hier lernst</h3>
+      <ul>
+        <li><code>rand()</code> ohne Parameter: eine große, beliebige Zufallszahl</li>
+        <li><code>rand(1, 100)</code>: eine Zufallszahl <strong>zwischen 1 und 100</strong> (beide Grenzen sind erlaubt)</li>
+        <li><code>rand(500, 800)</code>: du bestimmst selbst den Bereich – z. B. für einen Würfel <code>rand(1, 6)</code></li>
+      </ul>
+
+      <div class="merke"><b>Merke dir:</b> Bei jedem Seitenaufruf kommt eine <b>neue</b> Zahl –
+        genau so funktioniert das Zahlenratespiel in der Übung unten!</div>
+
+      <div class="aufgabe"><b>✏️ Deine Aufgabe:</b> Simuliere einen Würfel: Gib bei jedem
+        Aufruf eine zufällige Zahl von 1 bis 6 aus – und baue dazu das passende Emoji 🎲 aus.</div>
+    </div>
+  </section>
+
   <!-- ============ SPICKZETTEL ============ -->
   <h2 class="section-title">📋 PHP-Spickzettel</h2>
-  <p class="section-sub">Die wichtigsten Befehle aus den Lektionen 01–09 – zum Lernen und Nachschlagen.</p>
+  <p class="section-sub">Die wichtigsten Befehle aus den Lektionen 01–11 – zum Lernen und Nachschlagen.</p>
 
   <table class="cheat-table">
     <tr><th>Syntax</th><th>Bedeutung</th></tr>
@@ -681,8 +792,12 @@ auch mehrzeilig sein
     <tr><td><code>$_POST['feld'] / $_GET['feld']</code></td><td>Formulardaten empfangen (name-Attribut!)</td></tr>
     <tr><td><code>isset($_POST['feld'])</code></td><td>Prüfen, ob ein Feld abgeschickt wurde</td></tr>
     <tr><td><code>required</code></td><td>HTML: Feld muss ausgefüllt sein</td></tr>
-    <tr><td><code>rand(3, 20)</code></td><td>Zufallszahl zwischen 3 und 20</td></tr>
+    <tr><td><code>rand(3, 20)</code></td><td>Zufallszahl zwischen 3 und 20 (auch rand(1, 100) ...)</td></tr>
     <tr><td><code>$i % 2</code></td><td>Modulo (Rest der Division) – gerade: 0, ungerade: 1</td></tr>
+    <tr><td><code>&lt;input type="radio" name="x"&gt;</code></td><td>Auswahl: gleiches name = eine Gruppe, nur eine wählbar</td></tr>
+    <tr><td><code>&lt;select&gt; / &lt;option value="..."&gt;</code></td><td>Dropdown-Liste, value landet in $_POST</td></tr>
+    <tr><td><code>value="&lt;?php echo $var;?&gt;"</code></td><td>Formularfeld nach dem Abschicken vorausfüllen (Prefill)</td></tr>
+    <tr><td><code>if ($_POST) / if ($_GET)</code></td><td>Kurzprüfung: wurde das Formular abgeschickt?</td></tr>
   </table>
 
   <!-- ============ ÜBUNGSAUFGABEN ============ -->
@@ -751,7 +866,7 @@ auch mehrzeilig sein
   <section class="topic">
     <button class="topic-btn" onclick="toggleTopic(this)">
       <span class="topic-num">S1</span>
-      Mini-Shop: 12 Produktkarten
+      UE1b Shop: 12 Produktkarten
       <span class="arrow">▼</span>
     </button>
     <div class="topic-body">
@@ -779,7 +894,7 @@ auch mehrzeilig sein
   <section class="topic">
     <button class="topic-btn" onclick="toggleTopic(this)">
       <span class="topic-num">S2</span>
-      Mini-Shop: Labels mit if-Abfrage
+      UE1b Shop: Labels mit if-Abfrage
       <span class="arrow">▼</span>
     </button>
     <div class="topic-body">
@@ -841,7 +956,7 @@ auch mehrzeilig sein
   <section class="topic">
     <button class="topic-btn" onclick="toggleTopic(this)">
       <span class="topic-num">1×1+</span>
-      Einmaleins Extended: Malzahl per Formular
+      UE3 Einmaleins Extended: Malzahl per Formular
       <span class="arrow">▼</span>
     </button>
     <div class="topic-body">
@@ -869,56 +984,190 @@ auch mehrzeilig sein
     </div>
   </section>
 
-  <!-- Bonus: Quadratkarten -->
+  <!-- UE3a: Einmaleins Nachbau -->
   <section class="topic">
     <button class="topic-btn" onclick="toggleTopic(this)">
-      <span class="topic-num">⭐</span>
-      Bonus: Zahlen-Quadrat-Karten
+      <span class="topic-num">UE3a</span>
+      Einmaleins Nachbau: PHP ins fremde HTML
       <span class="arrow">▼</span>
     </button>
     <div class="topic-body">
-      <p><strong>Challenge (quadratkarten_extended.php):</strong> Karten mit Zahl und Quadrat
-         (<code>$i*$i</code>) im Grid ausgeben. Ohne Eingabe wird die Anzahl <strong>zufällig</strong>
-         gewählt, gerade/ungerade Zahlen bekommen <strong>unterschiedliche CSS-Klassen</strong>.
-         Hier kommen drei neue Befehle dazu:</p>
-      <ul>
-        <li><code>rand(3, 20)</code> – eine Zufallszahl zwischen 3 und 20</li>
-        <li><code>$i % 2</code> – <strong>Modulo</strong>: der Rest der Division. Gerade Zahlen haben Rest 0,
-            ungerade Rest 1 – so unterscheidest du sie!</li>
-        <li><code>if ($_GET)</code> – kurze Prüfung, ob überhaupt GET-Daten gesendet wurden</li>
-      </ul>
+      <p><strong>Aufgabe:</strong> Bau <strong>in einer vorgegebenen Datei</strong> (fremdes Design,
+         fertiges HTML – Referenz <code>einx1.php</code>) <strong> dieselbe Funktion ein wie in UE3</strong>.
+         Also: schau ganz genau hin, <em>wo</em> und <em>wie</em> PHP in ein bestehendes HTML eingebaut wird!</p>
+      <div class="merke"><b>Tipp:</b> Suche das Element, das sich wiederholt (die Tabellen<strong>zeile</strong>),
+        und ersetze nur dieses durch die Schleife. Kopf- und Fußbereich der Tabelle bleiben statisch –
+        wie in <b>05_htmlschleife.php</b>: dort blieben <code>&lt;ul&gt;</code> und <code>&lt;/ul&gt;</code> außen vor.</div>
       <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
       <div class="solution"><div class="code-window">
-        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> quadratkarten_extended.php – Kernidee</div>
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> einx1.php – Kernidee</div>
+<pre><span class="html-tag">&lt;table&gt;</span>
+    <span class="html-tag">&lt;tr&gt;&lt;th&gt;</span>#<span class="html-tag">&lt;/th&gt;&lt;th&gt;</span>mal<span class="html-tag">&lt;/th&gt;&lt;th&gt;</span>ist<span class="html-tag">&lt;/th&gt;&lt;/tr&gt;</span>
+    <span class="kw">&lt;?php</span>
+    <span class="kw">for</span> (<span class="var">$i</span>=<span class="num">1</span>; <span class="var">$i</span>&lt;=<span class="num">10</span>; <span class="var">$i</span>++) {
+        <span class="fn">echo</span> <span class="str">"&lt;tr&gt;&lt;td&gt;$i&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;"</span>.(<span class="num">3</span>*<span class="var">$i</span>).<span class="str">"&lt;/td&gt;&lt;/tr&gt;"</span>;
+    }
+    <span class="kw">?&gt;</span>
+<span class="html-tag">&lt;/table&gt;</span></pre>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- Quadratkarten Schritt 1 -->
+  <section class="topic">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">Q1</span>
+      Quadratkarten – Schritt 1: Schleife statt Copy-Paste
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p><strong>Aufgabe (quadratkarten_schritt1):</strong> Nimm die angehängte Datei als Grundlage
+         (drei statische Karten als Beispiel) und programmiere in PHP die Wiederholung <strong>einer Karte</strong>,
+         um die Quadratzahlen jeder Zahl von <strong>1 bis 15</strong> darzustellen.
+         Suche den HTML-Code, der wiederholt werden muss, und verändere ihn so, dass jeweils
+         die richtigen Informationen auf der Karte stehen.
+         Unterscheide danach in der Schleife, ob die Zahl gerade oder ungerade ist:
+         gerade → <code>&lt;div class='card even'&gt;</code>, ungerade → <code>&lt;div class='card odd'&gt;</code>.</p>
+      <div class="merke"><b>Tipp:</b> Gerade/ungerade prüfst du mit <strong>Modulo</strong>:
+        <code>$i % 2 == 0</code> heißt „durch 2 teilbar“. Das ist die flexible Variante –
+        statt für jede Zahl eine eigene if-Abfrage zu schreiben (siehe Demo-Karte unten!).</div>
+      <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
+      <div class="solution"><div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> quadratkarten_schritt1.php – Kernidee</div>
 <pre><span class="kw">&lt;?php</span>
-<span class="kw">if</span> (<span class="var">$_GET</span>) {
-    <span class="var">$anzahl</span> = <span class="var">$_GET</span>[<span class="str">"anzahl"</span>];
-}
-<span class="kw">else</span> {
-    <span class="var">$anzahl</span> = <span class="fn">rand</span>(<span class="num">3</span>, <span class="num">20</span>);
-}
-<span class="kw">?&gt;</span>
-<span class="cmt">&lt;!-- ... Formular mit method="get" und input name="anzahl" ... --&gt;</span>
-<span class="kw">&lt;?php</span>
-<span class="kw">for</span> (<span class="var">$i</span>=<span class="num">1</span>; <span class="var">$i</span>&lt;=<span class="var">$anzahl</span>; <span class="var">$i</span>++) {
+<span class="kw">for</span> (<span class="var">$i</span>=<span class="num">1</span>; <span class="var">$i</span>&lt;=<span class="num">15</span>; <span class="var">$i</span>++) {
     <span class="var">$quad</span> = <span class="var">$i</span>*<span class="var">$i</span>;
-    <span class="kw">if</span> (<span class="var">$i</span>%<span class="num">2</span>==<span class="num">0</span>) <span class="var">$klasse</span> = <span class="str">"even"</span>;
+    <span class="kw">if</span> (<span class="var">$i</span>%<span class="num">2</span> == <span class="num">0</span>) <span class="var">$klasse</span> = <span class="str">"even"</span>;
     <span class="kw">else</span> <span class="var">$klasse</span> = <span class="str">"odd"</span>;
-    <span class="fn">echo</span> <span class="str">"&lt;div class='card $klasse'&gt;&lt;h2&gt;$i&lt;/h2&gt;&lt;p&gt;Quadrat:&lt;br&gt;$quad&lt;/p&gt;&lt;/div&gt;"</span>;
+    <span class="fn">echo</span> <span class="str">"&lt;div class='card $klasse'&gt;
+        &lt;h2&gt;$i&lt;/h2&gt;
+        &lt;p&gt;Quadrat:&lt;br&gt;$quad&lt;/p&gt;
+    &lt;/div&gt;"</span>;
 }
 <span class="kw">?&gt;</span></pre>
       </div></div>
     </div>
   </section>
 
+  <!-- Quadratkarten Schritt 2 -->
+  <section class="topic">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">Q2</span>
+      Quadratkarten – Schritt 2: Anzahl per Formular
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p><strong>Aufgabe (quadratkarten_schritt2):</strong> Ergänze die Datei aus Schritt 1
+         um ein <strong>Formular, mit dem man die Anzahl der Karten bestimmen kann</strong>.
+         Die Schleife läuft dann nicht mehr bis 15, sondern bis zur eingegebenen Anzahl.</p>
+      <div class="merke"><b>Tipp:</b> Genau wie in <b>08_formular_get.php</b>:
+        Formular mit <code>method="get"</code>, Anzahl aus <code>$_GET["anzahl"]</code> auslesen –
+        und <code>if ($_GET)</code> sorgt dafür, dass es beim ersten Aufruf einen Default-Wert gibt.</div>
+      <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
+      <div class="solution"><div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> quadratkarten_schritt2.php – Kernidee</div>
+<pre><span class="kw">&lt;?php</span>
+<span class="kw">if</span> (<span class="var">$_GET</span>) {
+    <span class="var">$anzahl</span> = <span class="var">$_GET</span>[<span class="str">"anzahl"</span>];
+}
+<span class="kw">else</span> {
+    <span class="var">$anzahl</span> = <span class="num">15</span>;   <span class="cmt">// Default, wenn noch nichts eingegeben wurde</span>
+}
+<span class="kw">?&gt;</span>
+<span class="html-tag">&lt;form</span> method=<span class="str">"get"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;input</span> name=<span class="str">"anzahl"</span> type=<span class="str">"number"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;button</span> type=<span class="str">"submit"</span><span class="html-tag">&gt;</span>Anzeigen<span class="html-tag">&lt;/button&gt;</span>
+<span class="html-tag">&lt;/form&gt;</span>
+<span class="cmt">&lt;!-- ... und in der Schleife: $i &lt;= $anzahl ... --&gt;</span></pre>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- UE Zahlenraten -->
+  <section class="topic">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">🎲</span>
+      UE Zahlenraten: Das Ratespiel
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p><strong>Aufgabe (zahlenraten.php):</strong> Erstelle ein Zahlenratespiel:
+         Der Spieler / die Spielerin hat pro Zahl <strong>nur einen Versuch</strong>.
+         Nach dem Raten wird ausgegeben, ob es <strong>RICHTIG</strong> oder <strong>FALSCH</strong> war –
+         z. B.: „Meine Zahl war 3. Du hast 2 geraten! Das ist FALSCH!! :-(“.
+         Design wieder individuell – CSS-Trickkiste aufmachen!</p>
+      <div class="merke"><b>Pro Tipp:</b> Eine Zufallszahl zwischen 1 und 100 bekommst du mit
+        <code>rand(1, 100)</code> – siehe <b>Lektion 11</b>. Im Musterbeispiel wird mit 1 bis 5 gespielt.</div>
+      <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
+      <div class="solution"><div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> zahlenraten.php – Kernidee</div>
+<pre><span class="kw">&lt;?php</span>
+<span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_POST</span>[<span class="str">"tipp"</span>])) {
+    <span class="var">$zufallszahl</span> = <span class="fn">rand</span>(<span class="num">1</span>, <span class="num">5</span>);
+    <span class="var">$tipp</span> = <span class="var">$_POST</span>[<span class="str">"tipp"</span>];
+    <span class="kw">if</span> (<span class="var">$tipp</span> == <span class="var">$zufallszahl</span>) {
+        <span class="fn">echo</span> <span class="str">"Meine Zahl war $zufallszahl. Du hast $tipp geraten! Das ist RICHTIG!! :-)"</span>;
+    }
+    <span class="kw">else</span> {
+        <span class="fn">echo</span> <span class="str">"Meine Zahl war $zufallszahl. Du hast $tipp geraten! Das ist FALSCH!! :-("</span>;
+    }
+}
+<span class="kw">?&gt;</span>
+<span class="html-tag">&lt;form</span> method=<span class="str">"post"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;input</span> name=<span class="str">"tipp"</span> type=<span class="str">"number"</span> placeholder=<span class="str">"Errate mich!"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;button&gt;</span>Raten!<span class="html-tag">&lt;/button&gt;</span>
+<span class="html-tag">&lt;/form&gt;</span></pre>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- Demo: Abfrage & Schleife -->
+  <section class="topic">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">🧩</span>
+      Demo: Abfrage &amp; Schleife kombinieren
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p><strong>Lern-Beispiel aus dem Unterricht (abfrage-schleife.php):</strong>
+         26 Blöcke mit Überschrift und Text – und nach <strong>jedem zweiten Block</strong> soll ein
+         zusätzliches <code>&lt;hr&gt;</code> ausgegeben werden. Dafür kombinieren wir erstmals
+         <strong>Schleife + Abfrage</strong> – und lernen dabei den Modulo-Operator kennen.</p>
+      <div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> abfrage-schleife.php – die flexible Variante</div>
+<pre><span class="kw">for</span> (<span class="var">$i</span>=<span class="num">1</span>; <span class="var">$i</span>&lt;=<span class="num">26</span>; <span class="var">$i</span>++) {
+    <span class="fn">echo</span> <span class="str">"&lt;b&gt;Überschrift vom Block $i&lt;/b&gt;
+    &lt;br&gt;
+    &lt;em&gt;Ich bin ein Text vom Block&lt;/em&gt;
+    &lt;hr&gt;"</span>;
+
+    <span class="cmt">// nach jedem zweiten Block ein &lt;hr&gt; zusätzlich ausgeben</span>
+    <span class="cmt">// Lösungsvariante 2 (eher flexibel)</span>
+    <span class="cmt">// Modulo (%-Zeichen) ergibt den Rest einer Division</span>
+    <span class="kw">if</span> (<span class="var">$i</span> % <span class="num">2</span> == <span class="num">0</span>) {
+        <span class="fn">echo</span> <span class="str">"&lt;hr&gt;"</span>;
+    }
+}</pre>
+      </div>
+      <p>Im Unterricht haben wir auch die <strong>Variante 1</strong> besprochen: für jede gerade Zahl eine
+         eigene if-Abfrage (<code>if ($i==2) ... if ($i==4) ... if ($i==6) ...</code>) –
+         das funktioniert, ist aber <em>„nicht sehr flexibel“</em>: Bei 26 Blöcken bräuchtest du 13 Abfragen,
+         und bei jeder Änderung der Blockzahl müsstest du alle anpassen.</p>
+      <div class="merke"><b>Merke dir:</b> <code>$i % 2</code> ist der <strong>Modulo-Operator</strong> –
+        er liefert den <b>Rest der Division</b>. Gerade Zahlen haben Rest 0, ungerade Rest 1.
+        Mit einer einzigen if-Abfrage regelst du <em>alle</em> Fälle – dieselbe Technik wie bei den
+        Quadratkarten und in Lektion 06!</div>
+    </div>
+  </section>
+
   <!-- ============ QUIZ ============ -->
   <h2 class="section-title">🧠 Quiz: Bist du bereit?</h2>
-  <p class="section-sub">14 Fragen zu den Lektionen 01–09. Überlege gut – du kannst jede Frage nur einmal beantworten!</p>
+  <p class="section-sub">16 Fragen zu den Lektionen 01–11. Überlege gut – du kannst jede Frage nur einmal beantworten!</p>
 
   <div class="quiz-card" id="quiz">
     <div class="quiz-progress"><div class="bar" id="quizBar"></div></div>
     <div class="quiz-meta">
-      <span id="quizCount">Frage 1 von 14</span>
+      <span id="quizCount">Frage 1 von 16</span>
       <span>Punkte: <b id="quizScore">0</b></span>
     </div>
 
@@ -933,7 +1182,7 @@ auch mehrzeilig sein
     <div class="quiz-result" id="quizResult">
       <div class="emoji" id="resultEmoji">🎉</div>
       <h3 id="resultTitle">Quiz geschafft!</h3>
-      <div class="score" id="resultScore">0 / 14</div>
+      <div class="score" id="resultScore">0 / 16</div>
       <p id="resultText"></p>
       <button class="quiz-restart" onclick="restartQuiz()">🔄 Nochmal versuchen</button>
     </div>
@@ -1048,6 +1297,18 @@ const questions = [
     answers: ["Ob $i durch 2 teilbar ist (gerade Zahl)", "Ob $i größer als 2 ist", "Ob $i genau 2 ist", "Ob $i negativ ist"],
     correct: 0,
     explain: "% ist der Modulo-Operator: er gibt den Rest der Division. 6 % 2 = 0 (gerade), 7 % 2 = 1 (ungerade) – so bekommen gerade und ungerade Karten unterschiedliche CSS-Klassen."
+  },
+  {
+    q: "Was liefert rand(500, 800) in 11_zufallszahlen.php?",
+    answers: ["Immer 500", "Eine Zufallszahl zwischen 500 und 800 (Grenzen eingeschlossen)", "Eine Zufallszahl zwischen 0 und 800", "Einen Fehler, weil der Bereich zu groß ist"],
+    correct: 1,
+    explain: "rand(MIN, MAX) liefert eine ganze Zufallszahl inklusive beider Grenzen – rand(1, 6) wäre z. B. ein Würfel."
+  },
+  {
+    q: "Warum haben die Radio-Buttons in 10_formular-prefill.php beide name=\"hobby\"?",
+    answers: ["Damit PHP sie besser findet", "Zufall – der Name wäre egal", "Gleiches name = eine Gruppe: nur eine Option kann ausgewählt werden", "Damit beide gleichzeitig wählbar sind"],
+    correct: 2,
+    explain: "Radio-Buttons mit demselben name-Attribut bilden eine Gruppe – der Browser erlaubt nur eine Auswahl, und der gewählte value landet in $_POST[\"hobby\"]."
   }
 ];
 
@@ -1128,7 +1389,7 @@ function showResult() {
   document.getElementById('resultScore').textContent = score + ' / ' + questions.length;
   const ratio = score / questions.length;
   let emoji, title, text;
-  if (ratio === 1) { emoji = '🏆'; title = 'Perfekt!'; text = 'Du kennst die Lektionen 01–09 in und auswendig. Bereit für das nächste Projekt!'; }
+  if (ratio === 1) { emoji = '🏆'; title = 'Perfekt!'; text = 'Du kennst die Lektionen 01–11 in und auswendig. Bereit für das nächste Projekt!'; }
   else if (ratio >= 0.7) { emoji = '🎉'; title = 'Super gemacht!'; text = 'Du hast die Grundlagen drauf. Schau dir noch einmal die Themen an, bei denen du unsicher warst.'; }
   else if (ratio >= 0.4) { emoji = '💪'; title = 'Guter Anfang!'; text = 'Wiederhole die Themen und versuche es noch einmal – Übung macht den Meister.'; }
   else { emoji = '📚'; title = 'Nochmal üben!'; text = 'Klappe die Themen oben noch einmal auf und arbeite die Code-Beispiele selbst nach. Dann klappt es beim nächsten Mal!'; }
