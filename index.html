@@ -1,1 +1,226 @@
-PLACEHOLDER-FULL-CONTENT
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHP-Basics: Schritt für Schritt zum eigenen Skript</title>
+<style>
+  :root {
+    --bg: #0f1220;
+    --bg-card: #181c2f;
+    --bg-code: #0b0e1a;
+    --accent: #777bb4;
+    --accent-bright: #a8b0f0;
+    --accent-warm: #f0b429;
+    --text: #e8eaf6;
+    --text-dim: #9aa0c3;
+    --success: #2ecc71;
+    --error: #e74c3c;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Hero ---------- */
+  header {
+    background: linear-gradient(135deg, #232946 0%, #2b2150 60%, #1a1f3d 100%);
+    padding: 70px 0 60px;
+    text-align: center;
+    border-bottom: 3px solid var(--accent);
+  }
+  header .logo { font-size: 3rem; margin-bottom: 10px; }
+  header h1 { font-size: 2.2rem; margin-bottom: 12px; }
+  header h1 span { color: var(--accent-bright); }
+  header p { color: var(--text-dim); font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+  .badge {
+    display: inline-block; margin-top: 22px; padding: 8px 18px;
+    background: rgba(119,123,180,.18); border: 1px solid var(--accent);
+    border-radius: 999px; color: var(--accent-bright); font-size: .9rem;
+  }
+
+  /* ---------- Themen-Karten ---------- */
+  main { padding: 50px 0 30px; }
+  .intro-text { text-align: center; color: var(--text-dim); max-width: 660px; margin: 0 auto 40px; }
+  .intro-text strong { color: var(--text); }
+  .intro-text code { background: var(--bg-code); padding: 1px 7px; border-radius: 5px; color: var(--accent-bright); }
+
+  .topic {
+    background: var(--bg-card);
+    border: 1px solid #262b4a;
+    border-radius: var(--radius);
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .topic-btn {
+    width: 100%; display: flex; align-items: center; gap: 16px;
+    background: none; border: none; cursor: pointer;
+    padding: 20px 24px; text-align: left; color: var(--text);
+    font-size: 1.15rem; font-weight: 600; font-family: inherit;
+    transition: background .2s;
+  }
+  .topic-btn:hover { background: rgba(119,123,180,.08); }
+  .topic-num {
+    flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent); color: #fff; font-size: 1rem; font-weight: 700;
+  }
+  .topic-btn .arrow { margin-left: auto; transition: transform .3s; color: var(--text-dim); }
+  .topic.open .topic-btn .arrow { transform: rotate(180deg); }
+  .topic-body { display: none; padding: 0 28px 26px; }
+  .topic.open .topic-body { display: block; animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .topic-body p { margin-bottom: 14px; color: var(--text); }
+  .topic-body ul { margin: 0 0 16px 22px; }
+  .topic-body li { margin-bottom: 6px; }
+  .topic-body h3 { color: var(--accent-bright); margin: 20px 0 10px; font-size: 1.05rem; }
+  .topic-body code { background: var(--bg-code); padding: 1px 7px; border-radius: 5px; color: var(--accent-bright); }
+
+  /* ---------- Code-Blöcke ---------- */
+  .code-window { border-radius: 10px; overflow: hidden; margin: 16px 0 20px; border: 1px solid #262b4a; }
+  .code-title {
+    background: #1d2340; padding: 8px 14px; font-size: .8rem;
+    color: var(--text-dim); display: flex; align-items: center; gap: 8px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+  }
+  .code-title .dots { display: flex; gap: 5px; }
+  .code-title .dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .code-title .dots i:nth-child(1) { background: #e74c3c; }
+  .code-title .dots i:nth-child(2) { background: #f0b429; }
+  .code-title .dots i:nth-child(3) { background: #2ecc71; }
+  pre {
+    background: var(--bg-code); padding: 16px 18px; overflow-x: auto;
+    font-family: 'Fira Code', 'Consolas', monospace; font-size: .88rem; line-height: 1.65;
+  }
+  .kw { color: #c792ea; }        /* Keywords */
+  .str { color: #a5e075; }       /* Strings */
+  .var { color: #82aaff; }       /* Variablen */
+  .fn { color: #ffcb6b; }        /* Funktionen */
+  .num { color: #f78c6c; }       /* Zahlen */
+  .cmt { color: #5c6480; font-style: italic; } /* Kommentare */
+  .html-tag { color: #89ddff; }  /* HTML-Tags */
+
+  .merke {
+    background: rgba(240,180,41,.08); border-left: 4px solid var(--accent-warm);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 18px 0;
+    font-size: .95rem;
+  }
+  .merke b { color: var(--accent-warm); }
+  .achtung {
+    background: rgba(231,76,60,.08); border-left: 4px solid var(--error);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 18px 0;
+    font-size: .95rem;
+  }
+  .achtung b { color: var(--error); }
+  .aufgabe {
+    background: rgba(46,204,113,.08); border: 1px dashed var(--success);
+    padding: 14px 16px; border-radius: 10px; margin: 18px 0;
+    font-size: .95rem;
+  }
+  .aufgabe b { color: var(--success); }
+
+  .solution-btn {
+    background: none; border: 1px dashed var(--accent); color: var(--accent-bright);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: .88rem;
+    font-family: inherit; margin: 6px 0 10px; transition: background .2s;
+  }
+  .solution-btn:hover { background: rgba(119,123,180,.15); }
+  .solution { display: none; }
+  .solution.open { display: block; }
+
+  /* ---------- Spickzettel ---------- */
+  .section-title { text-align: center; font-size: 1.6rem; margin: 60px 0 8px; }
+  .section-sub { text-align: center; color: var(--text-dim); margin-bottom: 30px; }
+  .cheat-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; }
+  .cheat-table th {
+    background: #232946; padding: 14px 18px; text-align: left;
+    color: var(--accent-bright); font-size: .95rem;
+  }
+  .cheat-table td { padding: 13px 18px; border-top: 1px solid #262b4a; font-size: .93rem; }
+  .cheat-table tr:hover td { background: rgba(119,123,180,.06); }
+  .cheat-table code {
+    font-family: 'Fira Code', 'Consolas', monospace; color: var(--accent-bright);
+    background: var(--bg-code); padding: 2px 8px; border-radius: 5px; white-space: nowrap;
+  }
+
+  /* ---------- Quiz ---------- */
+  .quiz-card {
+    background: var(--bg-card); border: 1px solid #262b4a;
+    border-radius: var(--radius); padding: 30px; margin-top: 20px;
+  }
+  .quiz-progress { height: 8px; background: #262b4a; border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
+  .quiz-progress .bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); width: 0%; transition: width .4s; }
+  .quiz-meta { display: flex; justify-content: space-between; font-size: .85rem; color: var(--text-dim); margin-bottom: 22px; }
+  .quiz-question { font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; }
+  .quiz-code { margin-bottom: 20px; }
+  .answer {
+    display: block; width: 100%; text-align: left; margin-bottom: 10px;
+    padding: 14px 18px; border-radius: 10px; cursor: pointer;
+    background: #1d2240; border: 2px solid #2b3157; color: var(--text);
+    font-size: .98rem; font-family: inherit; transition: all .2s;
+  }
+  .answer:hover { border-color: var(--accent); background: rgba(119,123,180,.12); transform: translateX(4px); }
+  .answer.correct { border-color: var(--success); background: rgba(46,204,113,.12); }
+  .answer.wrong { border-color: var(--error); background: rgba(231,76,60,.12); }
+  .answer:disabled { cursor: default; }
+  .quiz-feedback { display: none; margin-top: 16px; padding: 14px 16px; border-radius: 10px; font-size: .95rem; }
+  .quiz-feedback.ok { display: block; background: rgba(46,204,113,.12); border: 1px solid var(--success); }
+  .quiz-feedback.nope { display: block; background: rgba(231,76,60,.12); border: 1px solid var(--error); }
+  .quiz-next {
+    display: none; margin-top: 18px; padding: 12px 28px; border: none; border-radius: 999px;
+    background: var(--accent); color: #fff; font-size: 1rem; cursor: pointer; font-family: inherit;
+    transition: background .2s;
+  }
+  .quiz-next:hover { background: var(--accent-bright); color: #1a1f3d; }
+  .quiz-result { display: none; text-align: center; padding: 20px 0; }
+  .quiz-result .emoji { font-size: 3rem; margin-bottom: 10px; }
+  .quiz-result h3 { font-size: 1.5rem; margin-bottom: 8px; }
+  .quiz-result .score { font-size: 2rem; font-weight: 700; color: var(--accent-bright); margin: 12px 0; }
+  .quiz-result p { color: var(--text-dim); margin-bottom: 22px; }
+  .quiz-restart {
+    padding: 12px 28px; border: 2px solid var(--accent); background: none; border-radius: 999px;
+    color: var(--accent-bright); font-size: 1rem; cursor: pointer; font-family: inherit;
+  }
+  .quiz-restart:hover { background: rgba(119,123,180,.15); }
+
+  footer {
+    margin-top: 70px; padding: 26px 0; text-align: center;
+    color: var(--text-dim); font-size: .85rem; border-top: 1px solid #262b4a;
+  }
+  footer code { color: var(--accent-bright); }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.6rem; }
+    .topic-btn { font-size: 1rem; padding: 16px 16px; }
+    .topic-body { padding: 0 16px 22px; }
+    .quiz-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">🐘</div>
+    <h1>Hallo <span>PHP-Entwickler:in</span>! 👋</h1>
+    <p>Hier lernst du Schritt für Schritt, wie du mit PHP dynamische Webseiten erstellst –
+       von der ersten Ausgabe bis zur eigenen Schleife im HTML. Klicke auf ein Thema, um loszulegen!</p>
+    <span class="badge">💻 Die Nummern entsprechen unseren Unterrichtsdateien (01–11)</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <p class="intro-text">
+    PHP läuft auf dem <strong>Server</strong> und erzeugt HTML, das im Browser ankommt.
+    Während HTML nur <strong>statisch</strong> ist (jeder sieht dasselbe), kann PHP Inhalte
+    <strong>dynamisch</strong> berechnen. Die Themen hier folgen genau unseren Dateien
+    <code>01_first.php</code> bis <code>11_zufallszahlen.php</code> – schau sie dir parallel an!
+  </p>
+
+VOLLSTÄNDIGER-INHALT-FOLGT-BEIM-NÄCHSTEN-AUFRUF
