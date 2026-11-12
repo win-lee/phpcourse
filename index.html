@@ -1211,40 +1211,40 @@ function toggleSolution(btn) {
 const questions = [
   {
     q: "Womit endet jede PHP-Anweisung?",
-    answers: ["Mit einem Punkt (.)", "Mit einem Semikolon (;)", "Mit einem Doppelpunkt (:)", "Mit einem Komma (,)"],
-    correct: 1,
+    answers: ["Mit einem Punkt (.)", "Mit einem Doppelpunkt (:)", "Mit einem Semikolon (;)", "Mit einem Komma (,)"],
+    correct: 2,
     explain: "Jede Anweisung in PHP endet mit einem Semikolon – vergisst du es, folgt ein Parse Error."
   },
   {
     q: "Wie schreibst du einen EINZEILIGEN Kommentar in PHP?",
-    answers: ["<!-- Kommentar -->", "// Kommentar", "/* Kommentar */", "#* Kommentar *#"],
-    correct: 1,
+    answers: ["// Kommentar", "<!-- Kommentar -->", "/* Kommentar */", "#* Kommentar *#"],
+    correct: 0,
     explain: "// ist der einzeilige Kommentar, /* ... */ der mehrzeilige. <!-- --> ist HTML!"
   },
   {
     q: "Was gibt dieser Code im Browser aus?",
     code: '$name = "Fritz";\necho "Willkommen <b>$name</b>";',
-    answers: ["Willkommen <b>$name</b>", "Willkommen $name", "Willkommen Fritz (fett gedruckt)", "Eine Fehlermeldung"],
-    correct: 2,
+    answers: ["Willkommen <b>$name</b>", "Willkommen $name", "Eine Fehlermeldung", "Willkommen Fritz (fett gedruckt)"],
+    correct: 3,
     explain: "Im doppelten Anführungszeichen wird $name durch den Wert ersetzt, <b> macht den Browser-Text fett."
   },
   {
     q: "Was ist der Datentyp von $komma = 4.5; ?",
-    answers: ["string", "integer", "float", "double-integer"],
-    correct: 2,
+    answers: ["string", "float", "integer", "double-integer"],
+    correct: 1,
     explain: "Kommazahlen heißen float – und werden mit PUNKT geschrieben (4.5, nicht 4,5)."
   },
   {
     q: "Wie verknüpfst du einen Text mit einer Variable?",
-    answers: ['"Wert: " + $zahl', '"Wert: " . $zahl', '"Wert: " -> $zahl', 'join("Wert: ", $zahl)'],
-    correct: 1,
+    answers: ['"Wert: " . $zahl', '"Wert: " + $zahl', '"Wert: " -> $zahl', 'join("Wert: ", $zahl)'],
+    correct: 0,
     explain: 'Der Punkt hängt Strings zusammen: "Die Variable zahl hat den Wert ".$zahl – genau wie in 03_variablen.php.'
   },
   {
     q: "Was passiert in 03_variablen.php, wenn du $name zweimal einen Wert gibst?",
     code: '$name = "Gertraud";\n$name = "Fritz";\necho $name;',
-    answers: ["Ausgabe: Gertraud", "Ausgabe: Fritz", "Eine Fehlermeldung", "Ausgabe: GertraudFritz"],
-    correct: 1,
+    answers: ["Ausgabe: Gertraud", "Eine Fehlermeldung", "Ausgabe: Fritz", "Ausgabe: GertraudFritz"],
+    correct: 2,
     explain: "Die zweite Zuweisung überschreibt die erste – am Ende gilt immer der letzte Wert."
   },
   {
@@ -1256,14 +1256,14 @@ const questions = [
   {
     q: "Wie oft läuft diese Schleife?",
     code: 'for ($i=1; $i<=20; $i++) {\n    echo "<li>xxx $i</li>";\n}',
-    answers: ["19-mal", "20-mal", "21-mal", "Unendlich oft"],
-    correct: 1,
+    answers: ["19-mal", "Unendlich oft", "21-mal", "20-mal"],
+    correct: 3,
     explain: "Sie startet bei 1 und läuft, solange $i <= 20 ist – also genau 20 Durchläufe (wie in 05_htmlschleife.php)."
   },
   {
     q: "Was macht $i++ in einer Schleife?",
-    answers: ["Addiert 1 zur Zählvariable", "Multipliziert die Zählvariable mit sich selbst", "Setzt $i auf 0 zurück", "Nichts, das ist nur ein Kommentar"],
-    correct: 0,
+    answers: ["Nichts, das ist nur ein Kommentar", "Multipliziert die Zählvariable mit sich selbst", "Setzt $i auf 0 zurück", "Addiert 1 zur Zählvariable"],
+    correct: 3,
     explain: "$i++ ist die Kurzform von $i = $i + 1 – ohne diesen Schritt wäre die Bedingung immer wahr (Endlosschleife)."
   },
   {
@@ -1275,14 +1275,14 @@ const questions = [
   {
     q: "Was gibt 06_abfrage.php mit $zahl = 8 im Browser aus?",
     code: '$zahl = 8;\nif ($zahl > 10) {\n    echo "größer 10";\n}\nelse if ($zahl > 5) {\n    echo "größer als 5 aber kleiner gleich 10";\n}\nelse {\n    echo "kleiner als 5";\n}',
-    answers: ["größer 10", "größer als 5 aber kleiner gleich 10", "kleiner als 5", "Alle drei Ausgaben erscheinen nacheinander"],
-    correct: 1,
+    answers: ["größer als 5 aber kleiner gleich 10", "größer 10", "kleiner als 5", "Alle drei Ausgaben erscheinen nacheinander"],
+    correct: 0,
     explain: "PHP prüft von oben nach unten: 8 > 10 ist falsch, 8 > 5 ist wahr → diese Ausgabe gewinnt, der Rest wird übersprungen."
   },
   {
     q: "Was macht isset($_POST[\"email\"]) in 09_formular-html.php?",
-    answers: ["Prüft, ob die E-Mail-Adresse gültig ist", "Prüft, ob das Feld überhaupt abgeschickt wurde", "Löscht das Feld aus dem Formular", "Verschickt die E-Mail automatisch"],
-    correct: 1,
+    answers: ["Prüft, ob die E-Mail-Adresse gültig ist", "Löscht das Feld aus dem Formular", "Prüft, ob das Feld überhaupt abgeschickt wurde", "Verschickt die E-Mail automatisch"],
+    correct: 2,
     explain: "isset() prüft, ob die Variable existiert – so vermeidest du Warnungen, wenn die Seite zum ersten Mal ohne Formulardaten aufgerufen wird."
   },
   {
@@ -1294,20 +1294,20 @@ const questions = [
   {
     q: "Was prüft if ($i % 2 == 0) in den Quadratkarten?",
     code: 'if ($i % 2 == 0) $klasse = "even";\nelse $klasse = "odd";',
-    answers: ["Ob $i durch 2 teilbar ist (gerade Zahl)", "Ob $i größer als 2 ist", "Ob $i genau 2 ist", "Ob $i negativ ist"],
-    correct: 0,
+    answers: ["Ob $i negativ ist", "Ob $i größer als 2 ist", "Ob $i genau 2 ist", "Ob $i durch 2 teilbar ist (gerade Zahl)"],
+    correct: 3,
     explain: "% ist der Modulo-Operator: er gibt den Rest der Division. 6 % 2 = 0 (gerade), 7 % 2 = 1 (ungerade) – so bekommen gerade und ungerade Karten unterschiedliche CSS-Klassen."
   },
   {
     q: "Was liefert rand(500, 800) in 11_zufallszahlen.php?",
-    answers: ["Immer 500", "Eine Zufallszahl zwischen 500 und 800 (Grenzen eingeschlossen)", "Eine Zufallszahl zwischen 0 und 800", "Einen Fehler, weil der Bereich zu groß ist"],
-    correct: 1,
+    answers: ["Immer 500", "Eine Zufallszahl zwischen 0 und 800", "Eine Zufallszahl zwischen 500 und 800 (Grenzen eingeschlossen)", "Einen Fehler, weil der Bereich zu groß ist"],
+    correct: 2,
     explain: "rand(MIN, MAX) liefert eine ganze Zufallszahl inklusive beider Grenzen – rand(1, 6) wäre z. B. ein Würfel."
   },
   {
     q: "Warum haben die Radio-Buttons in 10_formular-prefill.php beide name=\"hobby\"?",
-    answers: ["Damit PHP sie besser findet", "Zufall – der Name wäre egal", "Gleiches name = eine Gruppe: nur eine Option kann ausgewählt werden", "Damit beide gleichzeitig wählbar sind"],
-    correct: 2,
+    answers: ["Gleiches name = eine Gruppe: nur eine Option kann ausgewählt werden", "Zufall – der Name wäre egal", "Damit PHP sie besser findet", "Damit beide gleichzeitig wählbar sind"],
+    correct: 0,
     explain: "Radio-Buttons mit demselben name-Attribut bilden eine Gruppe – der Browser erlaubt nur eine Auswahl, und der gewählte value landet in $_POST[\"hobby\"]."
   }
 ];
