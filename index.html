@@ -184,6 +184,10 @@
   #quizStart { text-align: center; padding: 26px 10px 14px; }
   #quizStart p { color: var(--text-dim); margin-bottom: 18px; }
   .quiz-start-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .quiz-start-btns .quiz-next:disabled { opacity: .45; cursor: not-allowed; }
+  #progressLine { color: var(--text-dim); font-size: .95rem; margin: 14px 0 4px; }
+  .quiz-reset { background: none; border: none; color: var(--text-dim); font-size: .8rem;
+    text-decoration: underline; cursor: pointer; padding: 6px; }
   .quiz-result .emoji { font-size: 3rem; margin-bottom: 10px; }
   .quiz-result h3 { font-size: 1.5rem; margin-bottom: 8px; }
   .quiz-result .score { font-size: 2rem; font-weight: 700; color: var(--accent-bright); margin: 12px 0; }
@@ -1310,11 +1314,14 @@ Essen:
     </div>
 
     <div id="quizStart">
-      <p>Wie möchtest du starten?</p>
+      <p>Wie möchtest du starten? Dein Fortschritt wird auf diesem Gerät gespeichert – du kannst jederzeit weitermachen.</p>
       <div class="quiz-start-btns">
-        <button class="quiz-next" onclick="startQuiz(false)">📋 Alle Fragen – das volle Programm</button>
-        <button class="quiz-next" onclick="startQuiz(true)">🆕 Nur die neuen Fragen – passend zu den 🆕-Themen oben</button>
+        <button class="quiz-next" id="btnAll" onclick="startQuiz('all')">📋 Alle Fragen</button>
+        <button class="quiz-next" id="btnNew" onclick="startQuiz('new')">🆕 Nur die neuen Fragen</button>
+        <button class="quiz-next" id="btnOpen" onclick="startQuiz('open')">🔄 Offene Fragen üben</button>
       </div>
+      <p id="progressLine"></p>
+      <button class="quiz-reset" onclick="resetFortschritt()">🗑 Fortschritt auf diesem Gerät zurücksetzen</button>
     </div>
 
     <div id="quizPlay" style="display:none">
@@ -1542,6 +1549,9 @@ function checkAnswer(i, btn) {
   answered = true;
   const item = quizPool[current];
   const buttons = quizAnswers.querySelectorAll('.answer');
+  const f = ladeFortschritt();
+  f.answers[item._i] = (i === item.correct) ? 'ok' : 'nope';
+  speichereFortschritt(f);
   buttons.forEach(function(b) { b.disabled = true; });
   buttons[item.correct].classList.add('correct');
 
@@ -1579,13 +1589,40 @@ function showResult() {
   else if (ratio >= 0.7) { emoji = '🎉'; title = 'Super gemacht!'; text = 'Du hast die Grundlagen drauf. Schau dir noch einmal die Themen an, bei denen du unsicher warst.'; }
   else if (ratio >= 0.4) { emoji = '💪'; title = 'Guter Anfang!'; text = 'Wiederhole die Themen und versuche es noch einmal – Übung macht den Meister.'; }
   else { emoji = '📚'; title = 'Nochmal üben!'; text = 'Klappe die Themen oben noch einmal auf und arbeite die Code-Beispiele selbst nach. Dann klappt es beim nächsten Mal!'; }
+  const f = ladeFortschritt();
+  const geloest = Object.keys(f.answers).filter(function(k) { return f.answers[k] === 'ok'; }).length;
+  text += ' Insgesamt hast du inzwischen ' + geloest + ' von ' + questions.length + ' Fragen richtig gelöst.';
   document.getElementById('resultEmoji').textContent = emoji;
   document.getElementById('resultTitle').textContent = title;
   document.getElementById('resultText').textContent = text;
 }
 
-function startQuiz(onlyNew) {
-  quizPool = onlyNew ? questions.filter(function(q) { return q.neu; }) : questions;
+/* ---------- Fortschritt pro Gerät (localStorage) ----------
+   answers = { 0: 'ok', 3: 'nope', ... }  (Index der Frage im questions-Array)
+   Wichtig: Fragen nur AM ENDE anfügen, sonst verschieben sich die Indizes. */
+const F_KEY = 'php_lernwebsite_fortschritt';
+
+function ladeFortschritt() {
+  try {
+    const f = JSON.parse(localStorage.getItem(F_KEY));
+    return (f && typeof f === 'object' && f.answers) ? f : { answers: {} };
+  } catch (e) { return { answers: {} }; }
+}
+
+function speichereFortschritt(f) {
+  try { localStorage.setItem(F_KEY, JSON.stringify(f)); } catch (e) {}
+}
+
+function quizMitIndex() {
+  return questions.map(function(q, i) { return Object.assign({}, q, { _i: i }); });
+}
+
+function startQuiz(mode) {
+  const alle = quizMitIndex();
+  if (mode === 'new')      quizPool = alle.filter(function(q) { return q.neu; });
+  else if (mode === 'open') quizPool = alle.filter(function(q) { return ladeFortschritt().answers[q._i] !== 'ok'; });
+  else                      quizPool = alle;
+  if (quizPool.length === 0) { updateStartScreen(); return; }
   current = 0;
   score = 0;
   document.getElementById('quizScore').textContent = '0';
@@ -1595,12 +1632,35 @@ function startQuiz(onlyNew) {
   showQuestion();
 }
 
+function resetFortschritt() {
+  speichereFortschritt({ answers: {} });
+  updateStartScreen();
+}
+
+function updateStartScreen() {
+  const f = ladeFortschritt();
+  const geloest = Object.keys(f.answers).filter(function(k) { return f.answers[k] === 'ok'; }).length;
+  const nNeu = questions.filter(function(q) { return q.neu; }).length;
+  const offen = questions.length - geloest;
+  document.getElementById('btnAll').textContent = '📋 Alle Fragen (' + questions.length + ')';
+  document.getElementById('btnNew').textContent = '🆕 Nur die neuen Fragen (' + nNeu + ')';
+  document.getElementById('btnOpen').textContent = '🔄 Offene Fragen üben (' + offen + ')';
+  document.getElementById('btnNew').disabled = (nNeu === 0);
+  document.getElementById('btnOpen').disabled = (offen === 0);
+  document.getElementById('btnOpen').title = (offen === 0) ? 'Du hast bisher alle Fragen richtig gelöst!' : '';
+  document.getElementById('progressLine').textContent =
+    geloest > 0
+    ? '✅ Dein Fortschritt: ' + geloest + ' von ' + questions.length + ' Fragen richtig gelöst' + (offen > 0 ? ' – weiter geht’s!' : ' – komplett!')
+    : 'Noch kein gespeicherter Fortschritt auf diesem Gerät. Leg los!';
+}
+
 function restartQuiz() {
   current = 0;
   score = 0;
   document.getElementById('quizScore').textContent = '0';
   document.getElementById('quizPlay').style.display = 'none';
   document.getElementById('quizResult').style.display = 'none';
+  updateStartScreen();
   document.getElementById('quizStart').style.display = 'block';
 }
 
@@ -1617,13 +1677,7 @@ NEUE_THEMEN.forEach(function(id) {
   }
 });
 
-/* ---------- Start-Buttons dynamisch beschriften ---------- */
-(function() {
-  const n = questions.filter(function(q) { return q.neu; }).length;
-  const btns = document.querySelectorAll('#quizStart .quiz-next');
-  if (btns[0]) btns[0].textContent = '📋 Alle Fragen (' + questions.length + ')';
-  if (btns[1]) btns[1].textContent = '🆕 Nur die neuen Fragen (' + n + ')';
-})();
+updateStartScreen();
 </script>
 </body>
 </html>
