@@ -1351,7 +1351,22 @@ Essen:
 <script>
 /* ---------- Themen-Aufklapper ---------- */
 function toggleTopic(btn) {
-  btn.parentElement.classList.toggle('open');
+  const sec = btn.parentElement;
+  const jetztOffen = sec.classList.toggle('open');
+  if (jetztOffen) themaGesehen(sec);
+}
+
+/* Wenn ein als NEU markiertes Kapitel aufgemacht wird,
+   merken wir uns das pro Geraet – das Badge verschwindet dann persönlich. */
+function themaGesehen(sec) {
+  if (!sec.id || NEUE_THEMEN.indexOf(sec.id) === -1) return;
+  const f = ladeFortschritt();
+  if (f.gesehen.indexOf(sec.id) === -1) {
+    f.gesehen.push(sec.id);
+    speichereFortschritt(f);
+  }
+  const badge = sec.querySelector('.new-badge');
+  if (badge) badge.remove();
 }
 
 function toggleSolution(btn) {
@@ -1498,8 +1513,10 @@ const questions = [
    Wenn neue Kapitel/Übungen dazukommen, hier einfach die id des
    <section>-Elements eintragen (z. B. 'thema13', 'ue7').
    Die Seite setzt dann automatisch ein NEU-Badge an den Kapitel-
-   Button. Neue Quiz-Fragen markierst du mit  neu: true  – sie
-   erscheinen dann im Modus "Nur die neuen Fragen".
+   Button. Das Badge verschwindet pro Schueler:in, sobald das
+   Kapitel einmal aufgemacht wurde (localStorage, siehe toggleTopic).
+   Neue Quiz-Fragen markierst du mit  neu: true  – sie erscheinen
+   dann im Modus "Nur die neuen Fragen".
    Aktuell neu: Lektion 12 ('thema12') und UE_06 ('ue6').
    ================================================================ */
 const NEUE_THEMEN = ['thema12', 'ue6'];
@@ -1605,8 +1622,11 @@ const F_KEY = 'php_lernwebsite_fortschritt';
 function ladeFortschritt() {
   try {
     const f = JSON.parse(localStorage.getItem(F_KEY));
-    return (f && typeof f === 'object' && f.answers) ? f : { answers: {} };
-  } catch (e) { return { answers: {} }; }
+    if (f && typeof f === 'object') {
+      return { answers: f.answers || {}, gesehen: Array.isArray(f.gesehen) ? f.gesehen : [] };
+    }
+  } catch (e) {}
+  return { answers: {}, gesehen: [] };
 }
 
 function speichereFortschritt(f) {
@@ -1633,8 +1653,19 @@ function startQuiz(mode) {
 }
 
 function resetFortschritt() {
-  speichereFortschritt({ answers: {} });
+  speichereFortschritt({ answers: {}, gesehen: [] });
   updateStartScreen();
+  /* NEU-Badges wiederherstellen */
+  NEUE_THEMEN.forEach(function(id) {
+    const sec = document.getElementById(id);
+    if (!sec || sec.querySelector('.new-badge')) return;
+    const btn = sec.querySelector('.topic-btn');
+    if (!btn) return;
+    const b = document.createElement('span');
+    b.className = 'new-badge';
+    b.textContent = 'NEU';
+    btn.insertBefore(b, btn.firstChild);
+  });
 }
 
 function updateStartScreen() {
@@ -1664,10 +1695,13 @@ function restartQuiz() {
   document.getElementById('quizStart').style.display = 'block';
 }
 
-/* ---------- NEU-Badges automatisch an die Kapitel-Buttons ---------- */
+/* ---------- NEU-Badges automatisch an die Kapitel-Buttons ----------
+   Das Badge verschwindet, sobald der/die Schueler:in das Kapitel einmal
+   aufgemacht hat (pro Geraet gespeichert). */
 NEUE_THEMEN.forEach(function(id) {
   const sec = document.getElementById(id);
   if (!sec) return;
+  if (ladeFortschritt().gesehen.indexOf(id) !== -1) return;   // schon gesehen
   const btn = sec.querySelector('.topic-btn');
   if (btn && !btn.querySelector('.new-badge')) {
     const b = document.createElement('span');
