@@ -210,7 +210,7 @@
     <h1>Hallo <span>PHP-Entwickler:in</span>! 👋</h1>
     <p>Hier lernst du Schritt für Schritt, wie du mit PHP dynamische Webseiten erstellst –
        von der ersten Ausgabe bis zur eigenen Schleife im HTML. Klicke auf ein Thema, um loszulegen!</p>
-    <span class="badge">💻 Die Nummern entsprechen unseren Unterrichtsdateien (01–11)</span>
+    <span class="badge">💻 Die Nummern entsprechen unseren Unterrichtsdateien (01–12)</span>
   </div>
 </header>
 
@@ -220,7 +220,7 @@
     PHP läuft auf dem <strong>Server</strong> und erzeugt HTML, das im Browser ankommt.
     Während HTML nur <strong>statisch</strong> ist (jeder sieht dasselbe), kann PHP Inhalte
     <strong>dynamisch</strong> berechnen. Die Themen hier folgen genau unseren Dateien
-    <code>01_first.php</code> bis <code>11_zufallszahlen.php</code> – schau sie dir parallel an!
+    <code>01_first.php</code> bis <code>12_formular-action</code> – schau sie dir parallel an!
   </p>
 
   <!-- ============ THEMA 1: 01_first.php ============ -->
@@ -540,7 +540,7 @@ auch mehrzeilig sein
 
       <div class="achtung"><b>Achtung:</b> Beim allerersten Aufruf der Seite gibt es noch keine
         Formulardaten – PHP zeigt dann Warnungen an. Wie man das sauber löst, lernst du in
-        <b>Lektion 09</b> mit <code>isset()</code>.</div>
+        <b>Lektion 09</b> mit <code>!empty()</code>.</div>
 
       <div class="aufgabe"><b>✏️ Deine Aufgabe:</b> Erweitere das Formular um ein Feld für
         „Wohnort“ und gib einen vollständigen Satz damit aus, z. B.
@@ -606,13 +606,13 @@ auch mehrzeilig sein
   <section class="topic" id="thema9">
     <button class="topic-btn" onclick="toggleTopic(this)">
       <span class="topic-num">09</span>
-      Formular + HTML: isset() &amp; Validierung
+      Formular + HTML: !empty() &amp; Validierung
       <span class="arrow">▼</span>
     </button>
     <div class="topic-body">
       <p>Jetzt bauen wir alles zusammen: ein vollständiges HTML-Dokument mit Formular –
          und eine <strong>saubere Prüfung</strong>, ob überhaupt etwas gesendet wurde.
-         Dafür sorgt <code>isset()</code>.</p>
+         Dafür sorgt <code>!empty()</code>.</p>
 
       <div class="code-window">
         <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> 09_formular-html.php</div>
@@ -630,7 +630,7 @@ auch mehrzeilig sein
     <span class="html-tag">&lt;/form&gt;</span>
     <span class="html-tag">&lt;p&gt;</span>
     <span class="kw">&lt;?php</span>
-        <span class="kw">if</span> ( <span class="fn">isset</span>(<span class="var">$_POST</span>[<span class="str">"email"</span>]) ) {
+        <span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"email"</span>]) ) {
             <span class="var">$email</span> = <span class="var">$_POST</span>[<span class="str">"email"</span>];
             <span class="fn">echo</span> <span class="str">"Deine E-Mail $email ist gültig"</span>;
         }
@@ -642,18 +642,18 @@ auch mehrzeilig sein
 
       <h3>🔍 Was du hier lernst</h3>
       <ul>
-        <li><code>isset($_POST["email"])</code> prüft: <strong>Wurde das Feld überhaupt abgeschickt?</strong> So vermeidest du Warnungen beim ersten Seitenaufruf</li>
+        <li><code>!empty($_POST["email"])</code> prüft: <strong>Existiert das Feld UND wurde etwas eingegeben?</strong> So vermeidest du Warnungen beim ersten Seitenaufruf</li>
         <li><code>type="email"</code> lässt den Browser selbst prüfen, ob eine gültige E-Mail-Adresse eingegeben wurde</li>
         <li>Die Ausgabe steht <strong>genau dort im HTML</strong>, wo der PHP-Block ist – hier im <code>&lt;p&gt;</code>-Element</li>
       </ul>
 
       <div class="merke"><b>Merke dir:</b> Das ist das professionelle Muster für fast jede
-        Formular-Seite: <b>Formular oben, <code>if (isset(...))</code> darunter</b> –
+        Formular-Seite: <b>Formular oben, <code>if (!empty(...))</code> darunter</b> –
         erst prüfen, dann verarbeiten.</div>
 
       <div class="aufgabe"><b>✏️ Deine Aufgabe:</b> Baue einen „Login-Check“:
         Felder für Benutzername und Passwort (POST!). Mit <code>if</code> und
-        <code>isset()</code> prüfst du, ob beide ausgefüllt sind – wenn ja: „Willkommen!“,
+        <code>!empty()</code> prüfst du, ob beide ausgefüllt sind – wenn ja: „Willkommen!“,
         wenn nein: „Bitte alle Felder ausfüllen.“</div>
     </div>
   </section>
@@ -710,7 +710,7 @@ Essen:
 
       <h3>🔍 Was du hier lernst</h3>
       <ul>
-        <li><code>if ($_POST)</code> ist die Kurzform von „wurde irgendwas per POST geschickt?“ – wie <code>isset()</code> in Lektion 09</li>
+        <li><code>if ($_POST)</code> ist die Kurzform von „wurde irgendwas per POST geschickt?“ – ähnlich wie <code>!empty()</code> in Lektion 09</li>
         <li><strong>Prefill:</strong> <code>value="&lt;?php echo $eingabename;?&gt;"</code> schreibt die alte Eingabe zurück ins Feld – der Name bleibt nach dem Abschicken stehen</li>
         <li><strong>Radio-Buttons mit gleichem name</strong> bilden eine Gruppe – nur eine Option wählbar</li>
         <li><strong>Dropdown:</strong> <code>&lt;select&gt;</code> mit <code>&lt;option value="..."&gt;</code> – in PHP landet der <code>value</code> in <code>$_POST</code></li>
@@ -769,9 +769,81 @@ Essen:
     </div>
   </section>
 
+  <!-- ============ THEMA 12: 12_formular-action ============ -->
+  <section class="topic" id="thema12">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">12</span>
+      Formular an eine eigene Seite schicken: action
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p>Bis jetzt hat jedes Formular seine Daten <strong>an sich selbst</strong> geschickt.
+         Jetzt machen wir es wie die Profis: <strong>zwei Dateien</strong> – eine HTML-Seite mit dem
+         Formular und eine eigene PHP-Seite, die die Daten auswertet. Dafür sorgt das
+         <code>action</code>-Attribut. Beide Dateien liegen bei uns im Ordner
+         <code>12_formular-action</code>.</p>
+
+      <div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> 12_formular-action/formular_eingabe.html</div>
+<pre><span class="html-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="html-tag">&lt;html</span> lang=<span class="str">"en"</span><span class="html-tag">&gt;</span>
+<span class="html-tag">&lt;head&gt;</span>
+    <span class="html-tag">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;title&gt;</span>Document<span class="html-tag">&lt;/title&gt;</span>
+<span class="html-tag">&lt;/head&gt;</span>
+<span class="html-tag">&lt;body&gt;</span>
+    Gib die Anzahl der Mandarinen ein, die du bestellen willst.
+    <span class="html-tag">&lt;form</span> method=<span class="str">"post"</span> action=<span class="str">"formular_best.php"</span><span class="html-tag">&gt;</span>
+        <span class="html-tag">&lt;input</span> type=<span class="str">"number"</span> name=<span class="str">"anzahl"</span> placeholder=<span class="str">"Anzahl"</span> required<span class="html-tag">&gt;&lt;br&gt;</span>
+        <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"konto"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> gleich ein Konto anlegen?<span class="html-tag">&lt;br&gt;</span>
+        <span class="html-tag">&lt;button&gt;</span>Bestellung abschicken<span class="html-tag">&lt;/button&gt;</span> 
+    <span class="html-tag">&lt;/form&gt;</span>
+<span class="html-tag">&lt;/body&gt;</span>
+<span class="html-tag">&lt;/html&gt;</span></pre>
+      </div>
+
+      <div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> 12_formular-action/formular_best.php</div>
+<pre><span class="kw">&lt;?php</span>
+<span class="cmt">// Diese Datei bekommt Formular-Daten von formular_eingabe.html</span>
+
+<span class="kw">if</span> (<span class="var">$_POST</span>) { <span class="cmt">// &lt;- WENN ein Formular hierher geschickt wurde</span>
+    <span class="var">$anzahl</span> = <span class="var">$_POST</span>[<span class="str">"anzahl"</span>];
+    <span class="fn">echo</span> <span class="str">"Du hast $anzahl Mandarinen bestellt, danke!"</span>;
+
+    <span class="kw">if</span> (<span class="var">$_POST</span>[<span class="str">"konto"</span>] == <span class="str">"ja"</span>) {
+        <span class="fn">echo</span> <span class="str">"&lt;br&gt;Es wurde ein Konto für dich angelegt"</span>;
+    }
+}
+<span class="kw">else</span> {
+    <span class="fn">echo</span> <span class="str">"Keine Formulardaten empfangen.&lt;br&gt;"</span>;
+    <span class="fn">echo</span> <span class="str">"&lt;a href='formular_eingabe.html'&gt;zur Eingabe&lt;/a&gt;"</span>;
+}
+<span class="kw">?&gt;</span></pre>
+      </div>
+
+      <h3>🔍 Was du hier lernst</h3>
+      <ul>
+        <li><code>action="formular_best.php"</code>: Das Formular schickt seine Daten <strong>an eine andere Datei</strong> – die Eingabeseite bleibt dabei unverändert stehen</li>
+        <li>Die PHP-Seite kann <strong>alleine aufgerufen</strong> werden (z. B. per Link) – deshalb der <code>else</code>-Zweig mit dem freundlichen „Keine Formulardaten empfangen“ und dem Link zurück zur Eingabe</li>
+        <li>Eine <strong>Checkbox, die nicht angehakt ist, wird überhaupt nicht mitgeschickt</strong> – <code>$_POST["konto"]</code> existiert dann einfach nicht. Deshalb prüfen wir den Wert: <code>== "ja"</code></li>
+        <li><code>type="number"</code> + <code>required</code>: Der Browser erzwingt eine Zahl und ein ausgefülltes Feld – eine erste HTML-Validierung ganz ohne PHP</li>
+      </ul>
+
+      <div class="merke"><b>Merke dir:</b> Mit <b>action</b> trennst du Eingabe und Auswertung in
+        <b>zwei Dateien</b> – genau so baust du in <b>UE_06</b> dein Umfrageformular mit
+       Bestätigungsseite. Und: Eine nicht angehakte Checkbox schickt <b>gar nichts</b> –
+        daran führt kein Weg vorbei, man kann sie nur per PHP auf ihren value prüfen.</div>
+
+      <div class="aufgabe"><b>✏️ Deine Aufgabe:</b> Erweitere die Bestellseite: Füge ein Feld
+        für den Namen hinzu und einen zweiten Artikel – gib auf der Bestätigungsseite
+        eine kleine „Rechnung“ mit allen Daten aus.</div>
+    </div>
+  </section>
+
   <!-- ============ SPICKZETTEL ============ -->
   <h2 class="section-title">📋 PHP-Spickzettel</h2>
-  <p class="section-sub">Die wichtigsten Befehle aus den Lektionen 01–11 – zum Lernen und Nachschlagen.</p>
+  <p class="section-sub">Die wichtigsten Befehle aus den Lektionen 01–12 – zum Lernen und Nachschlagen.</p>
 
   <table class="cheat-table">
     <tr><th>Syntax</th><th>Bedeutung</th></tr>
@@ -790,7 +862,7 @@ Essen:
     <tr><td><code>&lt;form method="post"&gt;</code></td><td>HTML-Formular, Daten reisen unsichtbar</td></tr>
     <tr><td><code>&lt;form method="get"&gt;</code></td><td>Daten landen sichtbar in der URL (?name=wert&name2=wert2)</td></tr>
     <tr><td><code>$_POST['feld'] / $_GET['feld']</code></td><td>Formulardaten empfangen (name-Attribut!)</td></tr>
-    <tr><td><code>isset($_POST['feld'])</code></td><td>Prüfen, ob ein Feld abgeschickt wurde</td></tr>
+    <tr><td><code>!empty($_POST['feld'])</code></td><td>Prüfen, ob ein Feld abgeschickt wurde UND nicht leer ist</td></tr>
     <tr><td><code>required</code></td><td>HTML: Feld muss ausgefüllt sein</td></tr>
     <tr><td><code>rand(3, 20)</code></td><td>Zufallszahl zwischen 3 und 20 (auch rand(1, 100) ...)</td></tr>
     <tr><td><code>$i % 2</code></td><td>Modulo (Rest der Division) – gerade: 0, ungerade: 1</td></tr>
@@ -798,6 +870,8 @@ Essen:
     <tr><td><code>&lt;select&gt; / &lt;option value="..."&gt;</code></td><td>Dropdown-Liste, value landet in $_POST</td></tr>
     <tr><td><code>value="&lt;?php echo $var;?&gt;"</code></td><td>Formularfeld nach dem Abschicken vorausfüllen (Prefill)</td></tr>
     <tr><td><code>if ($_POST) / if ($_GET)</code></td><td>Kurzprüfung: wurde das Formular abgeschickt?</td></tr>
+    <tr><td><code>&lt;form action="datei.php"&gt;</code></td><td>Formular an eine eigene Seite schicken (Lektion 12)</td></tr>
+    <tr><td><code>&lt;input type="checkbox"&gt;</code></td><td>Angehackt: value wird geschickt – nicht angehackt: gar nichts!</td></tr>
   </table>
 
   <!-- ============ ÜBUNGSAUFGABEN ============ -->
@@ -1102,7 +1176,7 @@ Essen:
       <div class="solution"><div class="code-window">
         <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> zahlenraten.php – Kernidee</div>
 <pre><span class="kw">&lt;?php</span>
-<span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_POST</span>[<span class="str">"tipp"</span>])) {
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tipp"</span>])) {
     <span class="var">$zufallszahl</span> = <span class="fn">rand</span>(<span class="num">1</span>, <span class="num">5</span>);
     <span class="var">$tipp</span> = <span class="var">$_POST</span>[<span class="str">"tipp"</span>];
     <span class="kw">if</span> (<span class="var">$tipp</span> == <span class="var">$zufallszahl</span>) {
@@ -1117,6 +1191,64 @@ Essen:
     <span class="html-tag">&lt;input</span> name=<span class="str">"tipp"</span> type=<span class="str">"number"</span> placeholder=<span class="str">"Errate mich!"</span><span class="html-tag">&gt;</span>
     <span class="html-tag">&lt;button&gt;</span>Raten!<span class="html-tag">&lt;/button&gt;</span>
 <span class="html-tag">&lt;/form&gt;</span></pre>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- UE_06 Umfrageformular mit Bestätigungsseite -->
+  <section class="topic">
+    <button class="topic-btn" onclick="toggleTopic(this)">
+      <span class="topic-num">UE6</span>
+      UE_06: Umfrageformular mit Bestätigungsseite
+      <span class="arrow">▼</span>
+    </button>
+    <div class="topic-body">
+      <p><strong>Aufgabe (UE_06):</strong> Erstelle eine Umfrage in <strong>zwei Dateien</strong> –
+         genau wie in <b>Lektion 12</b>:</p>
+      <ul>
+        <li><strong>a)</strong> Eine <code>.html</code>-Seite mit dem Umfrageformular: Vorname, Nachname und
+            Wohnort (Textfelder), „Wie wohnen Sie?“ (Radio-Gruppe: Einfamilienhaus / Eigentumswohnung /
+            Mehrfamilienhaus), „Welche TV-Sendungen sehen Sie gern?“ (Checkboxen: Dokumentationen /
+            Nachrichten / Spielfilme / Sport), eine Nachricht (<code>&lt;textarea&gt;</code>) und ein Button
+            „Daten speichern“. Das Design kannst du frei gestalten!</li>
+        <li><strong>b)</strong> Eine eigene <code>.php</code>-Datei, die nach dem Abschicken eine
+            <strong>Bestätigungsseite</strong> zeigt: „Vielen Dank für die Teilnahme an unserer Umfrage“ –
+            mit allen übermittelten Daten darunter.</li>
+      </ul>
+      <div class="merke"><b>Tipp:</b> Im <code>&lt;form&gt;</code>-Tag deiner HTML-Seite brauchst du das
+        Attribut <code>action</code>, das auf die PHP-Seite verweist – z. B.
+        <code>&lt;form method="post" action="bestaetigung.php"&gt;</code>. Auf der PHP-Seite
+        findest du alle eingegebenen Daten in <code>$_POST</code> wieder (Hint in der Aufgabenstellung:
+        Infos zu Formulartypen gibt es auf w3schools.com/html/html_forms.asp).</div>
+      <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
+      <div class="solution"><div class="code-window">
+        <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> umfrage.html + bestaetigung.php – Kernidee</div>
+<pre><span class="cmt">&lt;!-- umfrage.html: Formular mit action --&gt;</span>
+<span class="html-tag">&lt;form</span> method=<span class="str">"post"</span> action=<span class="str">"bestaetigung.php"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;input</span> name=<span class="str">"vorname"</span><span class="html-tag">&gt;</span> <span class="html-tag">&lt;input</span> name=<span class="str">"nachname"</span><span class="html-tag">&gt;</span> <span class="html-tag">&lt;input</span> name=<span class="str">"ort"</span><span class="html-tag">&gt;</span>
+    <span class="html-tag">&lt;input</span> type=<span class="str">"radio"</span> name=<span class="str">"wohnung"</span> value=<span class="str">"Einfamilienhaus"</span><span class="html-tag">&gt;</span>
+    <span class="cmt">&lt;!-- Checkboxen: JEDE bekommt ihren eigenen Namen --&gt;</span>
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_doku"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Dokumentationen
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_news"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Nachrichten
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_filme"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Spielfilme
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_sport"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Sport
+    <span class="html-tag">&lt;textarea</span> name=<span class="str">"nachricht"</span><span class="html-tag">&gt;&lt;/textarea&gt;</span>
+    <span class="html-tag">&lt;button&gt;</span>Daten speichern<span class="html-tag">&lt;/button&gt;</span>
+<span class="html-tag">&lt;/form&gt;</span>
+
+<span class="cmt">&lt;!-- bestaetigung.php: Auswertung --&gt;</span>
+<span class="kw">&lt;?php</span>
+<span class="var">$vorname</span> = <span class="var">$_POST</span>[<span class="str">"vorname"</span>];
+<span class="fn">echo</span> <span class="str">"Vielen Dank für die Teilnahme an unserer Umfrage!&lt;br&gt;"</span>;
+<span class="fn">echo</span> <span class="str">"Vorname: $vorname&lt;br&gt;"</span>;
+<span class="fn">echo</span> <span class="str">"Wohnung: " . <span class="var">$_POST</span>[<span class="str">"wohnung"</span>] . <span class="str">"&lt;br&gt;"</span>;
+<span class="fn">echo</span> <span class="str">"Beliebte TV-Sendungen: "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_doku"</span>])) <span class="fn">echo</span> <span class="str">"Dokumentationen "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_news"</span>])) <span class="fn">echo</span> <span class="str">"Nachrichten "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_filme"</span>])) <span class="fn">echo</span> <span class="str">"Spielfilme "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_sport"</span>])) <span class="fn">echo</span> <span class="str">"Sport"</span>;
+<span class="fn">echo</span> <span class="str">"&lt;br&gt;Nachricht: " . <span class="var">$_POST</span>[<span class="str">"nachricht"</span>];
+<span class="kw">?&gt;</span></pre>
       </div></div>
     </div>
   </section>
@@ -1162,12 +1294,12 @@ Essen:
 
   <!-- ============ QUIZ ============ -->
   <h2 class="section-title">🧠 Quiz: Bist du bereit?</h2>
-  <p class="section-sub">16 Fragen zu den Lektionen 01–11. Überlege gut – du kannst jede Frage nur einmal beantworten!</p>
+  <p class="section-sub">20 Fragen zu den Lektionen 01–12. Überlege gut – du kannst jede Frage nur einmal beantworten!</p>
 
   <div class="quiz-card" id="quiz">
     <div class="quiz-progress"><div class="bar" id="quizBar"></div></div>
     <div class="quiz-meta">
-      <span id="quizCount">Frage 1 von 16</span>
+      <span id="quizCount">Frage 1 von 20</span>
       <span>Punkte: <b id="quizScore">0</b></span>
     </div>
 
@@ -1182,7 +1314,7 @@ Essen:
     <div class="quiz-result" id="quizResult">
       <div class="emoji" id="resultEmoji">🎉</div>
       <h3 id="resultTitle">Quiz geschafft!</h3>
-      <div class="score" id="resultScore">0 / 16</div>
+      <div class="score" id="resultScore">0 / 20</div>
       <p id="resultText"></p>
       <button class="quiz-restart" onclick="restartQuiz()">🔄 Nochmal versuchen</button>
     </div>
@@ -1280,10 +1412,10 @@ const questions = [
     explain: "PHP prüft von oben nach unten: 8 > 10 ist falsch, 8 > 5 ist wahr → diese Ausgabe gewinnt, der Rest wird übersprungen."
   },
   {
-    q: "Was macht isset($_POST[\"email\"]) in 09_formular-html.php?",
-    answers: ["Prüft, ob die E-Mail-Adresse gültig ist", "Löscht das Feld aus dem Formular", "Prüft, ob das Feld überhaupt abgeschickt wurde", "Verschickt die E-Mail automatisch"],
+    q: "Was macht !empty($_POST[\"email\"]) in 09_formular-html.php?",
+    answers: ["Prüft, ob die E-Mail-Adresse gültig ist", "Löscht das Feld aus dem Formular", "Prüft, ob das Feld abgeschickt wurde UND nicht leer ist", "Verschickt die E-Mail automatisch"],
     correct: 2,
-    explain: "isset() prüft, ob die Variable existiert – so vermeidest du Warnungen, wenn die Seite zum ersten Mal ohne Formulardaten aufgerufen wird."
+    explain: "empty() ist wahr, wenn die Variable fehlt oder leer ist – mit ! (nicht) drehst du es um: Feld existiert UND enthält etwas. So vermeidest du Warnungen beim ersten Seitenaufruf."
   },
   {
     q: "Nach dem Abschicken eines GET-Formulars sieht die URL so aus: ...?eingabe=Hallo&alter=17. Was bedeutet das Fragezeichen?",
@@ -1309,6 +1441,30 @@ const questions = [
     answers: ["Gleiches name = eine Gruppe: nur eine Option kann ausgewählt werden", "Zufall – der Name wäre egal", "Damit PHP sie besser findet", "Damit beide gleichzeitig wählbar sind"],
     correct: 0,
     explain: "Radio-Buttons mit demselben name-Attribut bilden eine Gruppe – der Browser erlaubt nur eine Auswahl, und der gewählte value landet in $_POST[\"hobby\"]."
+  },
+  {
+    q: "Wofür sorgt action=\"formular_best.php\" im form-Tag (Lektion 12)?",
+    answers: ["Das Formular schickt die Daten an die Datei formular_best.php", "Die Datei formular_best.php öffnet sich sofort beim Laden der Seite", "Die Eingaben werden an eine E-Mail-Adresse geschickt", "Das Formular wird nach dem Abschicken geleert"],
+    correct: 0,
+    explain: "action legt das Ziel fest: Die .html-Seite zeigt das Formular, die Angaben werden an die .php-Datei geschickt, die sie auswertet – Eingabe und Auswertung in zwei Dateien."
+  },
+  {
+    q: "Was passiert mit einer Checkbox, die NICHT angehakt wurde?",
+    answers: ["Sie schickt den Wert \"nein\"", "Sie wird überhaupt nicht mitgeschickt – der Eintrag fehlt in $_POST", "Sie schickt einen leeren Text", "Der Browser blockiert das Abschicken"],
+    correct: 1,
+    explain: "Nicht angehackte Checkboxen reisen einfach nicht mit – $_POST[\"konto\"] existiert dann gar nicht. Deshalb prüft formular_best.php den Wert mit == \"ja\"."
+  },
+  {
+    q: "Du rufst formular_best.php direkt im Browser auf, ohne das Formular abzuschicken. Was erscheint?",
+    answers: ["Du hast 0 Mandarinen bestellt, danke!", "Eine leere Seite", "Keine Formulardaten empfangen. + der Link zur Eingabe", "Eine PHP-Fehlermeldung"],
+    correct: 2,
+    explain: "if ($_POST) ist falsch, deshalb läuft der else-Zweig: freundliche Meldung und ein Link zurück zu formular_eingabe.html – gute Seiten halten immer einen Plan B bereit."
+  },
+  {
+    q: "Warum prüft formular_best.php die Checkbox mit $_POST[\"konto\"] == \"ja\"?",
+    answers: ["Damit man die Checkbox nicht versehentlich zweimal anhackt", "Weil \"ja\" der Standardwert jeder Checkbox in PHP ist", "Damit die Bestellung nur mit Konto abgeschickt werden kann", "Weil eine nicht angehackte Checkbox gar nicht mitgeschickt wird – der value \"ja\" kommt also nur bei Anhacken an"],
+    correct: 3,
+    explain: "Existiert $_POST[\"konto\"], wurde die Checkbox angehackt – der Vergleich mit dem value ist die saubere Art, das zu erkennen (siehe auch Spickzettel)."
   }
 ];
 
@@ -1389,7 +1545,7 @@ function showResult() {
   document.getElementById('resultScore').textContent = score + ' / ' + questions.length;
   const ratio = score / questions.length;
   let emoji, title, text;
-  if (ratio === 1) { emoji = '🏆'; title = 'Perfekt!'; text = 'Du kennst die Lektionen 01–11 in und auswendig. Bereit für das nächste Projekt!'; }
+  if (ratio === 1) { emoji = '🏆'; title = 'Perfekt!'; text = 'Du kennst die Lektionen 01–12 in und auswendig. Bereit für das nächste Projekt!'; }
   else if (ratio >= 0.7) { emoji = '🎉'; title = 'Super gemacht!'; text = 'Du hast die Grundlagen drauf. Schau dir noch einmal die Themen an, bei denen du unsicher warst.'; }
   else if (ratio >= 0.4) { emoji = '💪'; title = 'Guter Anfang!'; text = 'Wiederhole die Themen und versuche es noch einmal – Übung macht den Meister.'; }
   else { emoji = '📚'; title = 'Nochmal üben!'; text = 'Klappe die Themen oben noch einmal auf und arbeite die Code-Beispiele selbst nach. Dann klappt es beim nächsten Mal!'; }
