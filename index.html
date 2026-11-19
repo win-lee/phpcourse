@@ -1223,22 +1223,31 @@ Essen:
       <button class="solution-btn" onclick="toggleSolution(this)">💡 Lösung anzeigen</button>
       <div class="solution"><div class="code-window">
         <div class="code-title"><span class="dots"><i></i><i></i><i></i></span> umfrage.html + bestaetigung.php – Kernidee</div>
-<pre><span class="cmt">&lt!-- umfrage.html: Formular mit action --&gt;</span>
+<pre><span class="cmt">&lt;!-- umfrage.html: Formular mit action --&gt;</span>
 <span class="html-tag">&lt;form</span> method=<span class="str">"post"</span> action=<span class="str">"bestaetigung.php"</span><span class="html-tag">&gt;</span>
     <span class="html-tag">&lt;input</span> name=<span class="str">"vorname"</span><span class="html-tag">&gt;</span> <span class="html-tag">&lt;input</span> name=<span class="str">"nachname"</span><span class="html-tag">&gt;</span> <span class="html-tag">&lt;input</span> name=<span class="str">"ort"</span><span class="html-tag">&gt;</span>
     <span class="html-tag">&lt;input</span> type=<span class="str">"radio"</span> name=<span class="str">"wohnung"</span> value=<span class="str">"Einfamilienhaus"</span><span class="html-tag">&gt;</span>
-    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv[]"</span> value=<span class="str">"Sport"</span><span class="html-tag">&gt;</span>
+    <span class="cmt">&lt;!-- Checkboxen: JEDE bekommt ihren eigenen Namen --&gt;</span>
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_doku"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Dokumentationen
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_news"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Nachrichten
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_filme"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Spielfilme
+    <span class="html-tag">&lt;input</span> type=<span class="str">"checkbox"</span> name=<span class="str">"tv_sport"</span> value=<span class="str">"ja"</span><span class="html-tag">&gt;</span> Sport
     <span class="html-tag">&lt;textarea</span> name=<span class="str">"nachricht"</span><span class="html-tag">&gt;&lt;/textarea&gt;</span>
     <span class="html-tag">&lt;button&gt;</span>Daten speichern<span class="html-tag">&lt;/button&gt;</span>
 <span class="html-tag">&lt;/form&gt;</span>
 
-<span class="cmt">&lt!-- bestaetigung.php: Auswertung --&gt;</span>
+<span class="cmt">&lt;!-- bestaetigung.php: Auswertung --&gt;</span>
 <span class="kw">&lt;?php</span>
 <span class="var">$vorname</span> = <span class="var">$_POST</span>[<span class="str">"vorname"</span>];
 <span class="fn">echo</span> <span class="str">"Vielen Dank für die Teilnahme an unserer Umfrage!&lt;br&gt;"</span>;
 <span class="fn">echo</span> <span class="str">"Vorname: $vorname&lt;br&gt;"</span>;
 <span class="fn">echo</span> <span class="str">"Wohnung: " . <span class="var">$_POST</span>[<span class="str">"wohnung"</span>] . <span class="str">"&lt;br&gt;"</span>;
-<span class="fn">echo</span> <span class="str">"Nachricht: " . <span class="var">$_POST</span>[<span class="str">"nachricht"</span>];
+<span class="fn">echo</span> <span class="str">"Beliebte TV-Sendungen: "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_doku"</span>])) <span class="fn">echo</span> <span class="str">"Dokumentationen "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_news"</span>])) <span class="fn">echo</span> <span class="str">"Nachrichten "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_filme"</span>])) <span class="fn">echo</span> <span class="str">"Spielfilme "</span>;
+<span class="kw">if</span> ( !<span class="fn">empty</span>(<span class="var">$_POST</span>[<span class="str">"tv_sport"</span>])) <span class="fn">echo</span> <span class="str">"Sport"</span>;
+<span class="fn">echo</span> <span class="str">"&lt;br&gt;Nachricht: " . <span class="var">$_POST</span>[<span class="str">"nachricht"</span>];
 <span class="kw">?&gt;</span></pre>
       </div></div>
     </div>
@@ -1305,7 +1314,7 @@ Essen:
     <div class="quiz-result" id="quizResult">
       <div class="emoji" id="resultEmoji">🎉</div>
       <h3 id="resultTitle">Quiz geschafft!</h3>
-      <div class="score" id="resultScore">0 / 16</div>
+      <div class="score" id="resultScore">0 / 20</div>
       <p id="resultText"></p>
       <button class="quiz-restart" onclick="restartQuiz()">🔄 Nochmal versuchen</button>
     </div>
