@@ -178,6 +178,12 @@
   }
   .quiz-next:hover { background: var(--accent-bright); color: #1a1f3d; }
   .quiz-result { display: none; text-align: center; padding: 20px 0; }
+  .new-badge { display: inline-block; background: linear-gradient(135deg, #e8613c, #f7b32b); color: #fff;
+    font-size: .68rem; font-weight: 800; letter-spacing: .5px; border-radius: 20px; padding: 3px 10px;
+    margin-right: 10px; vertical-align: middle; box-shadow: 0 2px 8px rgba(247,179,43,.35); }
+  #quizStart { text-align: center; padding: 26px 10px 14px; }
+  #quizStart p { color: var(--text-dim); margin-bottom: 18px; }
+  .quiz-start-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .quiz-result .emoji { font-size: 3rem; margin-bottom: 10px; }
   .quiz-result h3 { font-size: 1.5rem; margin-bottom: 8px; }
   .quiz-result .score { font-size: 2rem; font-weight: 700; color: var(--accent-bright); margin: 12px 0; }
@@ -1196,7 +1202,7 @@ Essen:
   </section>
 
   <!-- UE_06 Umfrageformular mit Bestätigungsseite -->
-  <section class="topic">
+  <section class="topic" id="ue6">
     <button class="topic-btn" onclick="toggleTopic(this)">
       <span class="topic-num">UE6</span>
       UE_06: Umfrageformular mit Bestätigungsseite
@@ -1294,7 +1300,7 @@ Essen:
 
   <!-- ============ QUIZ ============ -->
   <h2 class="section-title">🧠 Quiz: Bist du bereit?</h2>
-  <p class="section-sub">20 Fragen zu den Lektionen 01–12. Überlege gut – du kannst jede Frage nur einmal beantworten!</p>
+  <p class="section-sub">20 Fragen zu den Lektionen 01–12. Beim Start kannst du wählen: alle Fragen – oder nur die neuen (passend zu den 🆕-markierten Themen). Überlege gut, du kannst jede Frage nur einmal beantworten!</p>
 
   <div class="quiz-card" id="quiz">
     <div class="quiz-progress"><div class="bar" id="quizBar"></div></div>
@@ -1303,7 +1309,15 @@ Essen:
       <span>Punkte: <b id="quizScore">0</b></span>
     </div>
 
-    <div id="quizPlay">
+    <div id="quizStart">
+      <p>Wie möchtest du starten?</p>
+      <div class="quiz-start-btns">
+        <button class="quiz-next" onclick="startQuiz(false)">📋 Alle Fragen – das volle Programm</button>
+        <button class="quiz-next" onclick="startQuiz(true)">🆕 Nur die neuen Fragen – passend zu den 🆕-Themen oben</button>
+      </div>
+    </div>
+
+    <div id="quizPlay" style="display:none">
       <div class="quiz-question" id="quizQuestion"></div>
       <div class="quiz-code" id="quizCode"></div>
       <div id="quizAnswers"></div>
@@ -1444,30 +1458,46 @@ const questions = [
   },
   {
     q: "Wofür sorgt action=\"formular_best.php\" im form-Tag (Lektion 12)?",
+    neu: true,
     answers: ["Das Formular schickt die Daten an die Datei formular_best.php", "Die Datei formular_best.php öffnet sich sofort beim Laden der Seite", "Die Eingaben werden an eine E-Mail-Adresse geschickt", "Das Formular wird nach dem Abschicken geleert"],
     correct: 0,
     explain: "action legt das Ziel fest: Die .html-Seite zeigt das Formular, die Angaben werden an die .php-Datei geschickt, die sie auswertet – Eingabe und Auswertung in zwei Dateien."
   },
   {
     q: "Was passiert mit einer Checkbox, die NICHT angehakt wurde?",
+    neu: true,
     answers: ["Sie schickt den Wert \"nein\"", "Sie wird überhaupt nicht mitgeschickt – der Eintrag fehlt in $_POST", "Sie schickt einen leeren Text", "Der Browser blockiert das Abschicken"],
     correct: 1,
     explain: "Nicht angehackte Checkboxen reisen einfach nicht mit – $_POST[\"konto\"] existiert dann gar nicht. Deshalb prüft formular_best.php den Wert mit == \"ja\"."
   },
   {
     q: "Du rufst formular_best.php direkt im Browser auf, ohne das Formular abzuschicken. Was erscheint?",
+    neu: true,
     answers: ["Du hast 0 Mandarinen bestellt, danke!", "Eine leere Seite", "Keine Formulardaten empfangen. + der Link zur Eingabe", "Eine PHP-Fehlermeldung"],
     correct: 2,
     explain: "if ($_POST) ist falsch, deshalb läuft der else-Zweig: freundliche Meldung und ein Link zurück zu formular_eingabe.html – gute Seiten halten immer einen Plan B bereit."
   },
   {
     q: "Warum prüft formular_best.php die Checkbox mit $_POST[\"konto\"] == \"ja\"?",
+    neu: true,
     answers: ["Damit man die Checkbox nicht versehentlich zweimal anhackt", "Weil \"ja\" der Standardwert jeder Checkbox in PHP ist", "Damit die Bestellung nur mit Konto abgeschickt werden kann", "Weil eine nicht angehackte Checkbox gar nicht mitgeschickt wird – der value \"ja\" kommt also nur bei Anhacken an"],
     correct: 3,
     explain: "Existiert $_POST[\"konto\"], wurde die Checkbox angehackt – der Vergleich mit dem value ist die saubere Art, das zu erkennen (siehe auch Spickzettel)."
   }
 ];
 
+/* ================================================================
+   🔧 PFLEGE-LISTE: Neue Inhalte markieren
+   Wenn neue Kapitel/Übungen dazukommen, hier einfach die id des
+   <section>-Elements eintragen (z. B. 'thema13', 'ue7').
+   Die Seite setzt dann automatisch ein NEU-Badge an den Kapitel-
+   Button. Neue Quiz-Fragen markierst du mit  neu: true  – sie
+   erscheinen dann im Modus "Nur die neuen Fragen".
+   Aktuell neu: Lektion 12 ('thema12') und UE_06 ('ue6').
+   ================================================================ */
+const NEUE_THEMEN = ['thema12', 'ue6'];
+
+let quizPool = questions;
 let current = 0;
 let score = 0;
 let answered = false;
@@ -1485,7 +1515,7 @@ function esc(s) {
 
 function showQuestion() {
   answered = false;
-  const item = questions[current];
+  const item = quizPool[current];
   quizQuestion.textContent = 'Frage ' + (current + 1) + ': ' + item.q;
   quizCode.innerHTML = item.code
     ? '<div class="code-window"><pre>' + esc(item.code).replace(/\n/g, '<br>') + '</pre></div>'
@@ -1503,14 +1533,14 @@ function showQuestion() {
     quizAnswers.appendChild(btn);
   });
 
-  document.getElementById('quizCount').textContent = 'Frage ' + (current + 1) + ' von ' + questions.length;
-  quizBar.style.width = (current / questions.length * 100) + '%';
+  document.getElementById('quizCount').textContent = 'Frage ' + (current + 1) + ' von ' + quizPool.length;
+  quizBar.style.width = (current / quizPool.length * 100) + '%';
 }
 
 function checkAnswer(i, btn) {
   if (answered) return;
   answered = true;
-  const item = questions[current];
+  const item = quizPool[current];
   const buttons = quizAnswers.querySelectorAll('.answer');
   buttons.forEach(function(b) { b.disabled = true; });
   buttons[item.correct].classList.add('correct');
@@ -1525,13 +1555,13 @@ function checkAnswer(i, btn) {
     quizFeedback.className = 'quiz-feedback nope';
     quizFeedback.textContent = '❌ Nicht ganz. ' + item.explain;
   }
-  quizNext.textContent = current === questions.length - 1 ? 'Ergebnis anzeigen 🏁' : 'Weiter →';
+  quizNext.textContent = current === quizPool.length - 1 ? 'Ergebnis anzeigen 🏁' : 'Weiter →';
   quizNext.style.display = 'inline-block';
 }
 
 function nextQuestion() {
   current++;
-  if (current < questions.length) {
+  if (current < quizPool.length) {
     showQuestion();
   } else {
     showResult();
@@ -1542,8 +1572,8 @@ function showResult() {
   document.getElementById('quizPlay').style.display = 'none';
   const result = document.getElementById('quizResult');
   result.style.display = 'block';
-  document.getElementById('resultScore').textContent = score + ' / ' + questions.length;
-  const ratio = score / questions.length;
+  document.getElementById('resultScore').textContent = score + ' / ' + quizPool.length;
+  const ratio = score / quizPool.length;
   let emoji, title, text;
   if (ratio === 1) { emoji = '🏆'; title = 'Perfekt!'; text = 'Du kennst die Lektionen 01–12 in und auswendig. Bereit für das nächste Projekt!'; }
   else if (ratio >= 0.7) { emoji = '🎉'; title = 'Super gemacht!'; text = 'Du hast die Grundlagen drauf. Schau dir noch einmal die Themen an, bei denen du unsicher warst.'; }
@@ -1554,16 +1584,46 @@ function showResult() {
   document.getElementById('resultText').textContent = text;
 }
 
+function startQuiz(onlyNew) {
+  quizPool = onlyNew ? questions.filter(function(q) { return q.neu; }) : questions;
+  current = 0;
+  score = 0;
+  document.getElementById('quizScore').textContent = '0';
+  document.getElementById('quizStart').style.display = 'none';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizPlay').style.display = 'block';
+  showQuestion();
+}
+
 function restartQuiz() {
   current = 0;
   score = 0;
   document.getElementById('quizScore').textContent = '0';
-  document.getElementById('quizPlay').style.display = 'block';
+  document.getElementById('quizPlay').style.display = 'none';
   document.getElementById('quizResult').style.display = 'none';
-  showQuestion();
+  document.getElementById('quizStart').style.display = 'block';
 }
 
-showQuestion();
+/* ---------- NEU-Badges automatisch an die Kapitel-Buttons ---------- */
+NEUE_THEMEN.forEach(function(id) {
+  const sec = document.getElementById(id);
+  if (!sec) return;
+  const btn = sec.querySelector('.topic-btn');
+  if (btn && !btn.querySelector('.new-badge')) {
+    const b = document.createElement('span');
+    b.className = 'new-badge';
+    b.textContent = 'NEU';
+    btn.insertBefore(b, btn.firstChild);
+  }
+});
+
+/* ---------- Start-Buttons dynamisch beschriften ---------- */
+(function() {
+  const n = questions.filter(function(q) { return q.neu; }).length;
+  const btns = document.querySelectorAll('#quizStart .quiz-next');
+  if (btns[0]) btns[0].textContent = '📋 Alle Fragen (' + questions.length + ')';
+  if (btns[1]) btns[1].textContent = '🆕 Nur die neuen Fragen (' + n + ')';
+})();
 </script>
 </body>
 </html>
